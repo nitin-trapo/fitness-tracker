@@ -27,21 +27,6 @@
 ssh root@YOUR_DROPLET_IP
 ```
 
-### Create a deploy user (recommended)
-```bash
-# Create user
-adduser deploy
-
-# Add to sudo group
-usermod -aG sudo deploy
-
-# Copy SSH keys to new user
-rsync --archive --chown=deploy:deploy ~/.ssh /home/deploy
-
-# Switch to deploy user
-su - deploy
-```
-
 ---
 
 ## Step 3: Run the Setup Script
@@ -49,9 +34,8 @@ su - deploy
 Upload and run the setup script on your droplet:
 
 ```bash
-# On your droplet (as deploy user)
-curl -o setup-server.sh https://raw.githubusercontent.com/YOUR_REPO/main/deploy/setup-server.sh
-# OR copy the content manually
+# On your droplet (as root)
+# Copy the content of deploy/setup-server.sh manually or upload it
 
 bash setup-server.sh
 ```
@@ -73,7 +57,7 @@ On your **local machine**, add the production remote:
 cd /path/to/fitness-tracker
 
 # Add production remote
-git remote add production ssh://deploy@YOUR_DROPLET_IP/var/repo/fitness-tracker.git
+git remote add production ssh://root@YOUR_DROPLET_IP/var/repo/fitness-tracker.git
 
 # Verify remotes
 git remote -v
@@ -165,8 +149,8 @@ npm rebuild better-sqlite3
 
 ### Permission denied
 ```bash
-sudo chown -R deploy:deploy /var/www/fitness-tracker
-sudo chown -R deploy:deploy /var/repo
+chown -R root:root /var/www/fitness-tracker
+chown -R root:root /var/repo
 ```
 
 ### Port already in use

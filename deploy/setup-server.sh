@@ -130,15 +130,15 @@ sudo ufw allow OpenSSH
 sudo ufw --force enable
 
 # Set up PM2 to start on boot
-pm2 startup systemd -u $USER --hp /home/$USER
-sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u $USER --hp /home/$USER
+pm2 startup systemd -u root --hp /root
+sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u root --hp /root
 
 echo ""
 echo "=== Setup Complete ==="
 echo ""
 echo "Next steps:"
 echo "1. On your LOCAL machine, add the remote:"
-echo "   git remote add production ssh://$USER@YOUR_DROPLET_IP$REPO_DIR"
+echo "   git remote add production ssh://root@YOUR_DROPLET_IP$REPO_DIR"
 echo ""
 echo "2. Push to deploy:"
 echo "   git push production main"
