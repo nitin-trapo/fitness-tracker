@@ -84,24 +84,24 @@ export default function Dashboard({ data, onExerciseToggle, onMealToggle, onDail
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">{dayName}</h2>
-            <p className="text-sm sm:text-base text-gray-500">{dateStr}</p>
-          </div>
-          <div className="flex items-center gap-2 bg-orange-50 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl">
-            <Flame className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
-            <span className="text-sm sm:text-base font-semibold text-orange-600">{streak}d</span>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">{dayName}</h2>
+          <p className="text-sm sm:text-base text-gray-500">{dateStr}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowTimer(!showTimer)}
+            className="w-10 h-10 rounded-xl bg-blue-100 hover:bg-blue-200 flex items-center justify-center transition-colors"
+            title="Rest Timer"
+          >
+            <Clock className="w-5 h-5 text-blue-600" />
+          </button>
+          <div className="flex items-center gap-2 bg-orange-50 px-3 py-2 rounded-xl">
+            <Flame className="w-5 h-5 text-orange-500" />
+            <span className="text-base font-semibold text-orange-600">{streak}d</span>
           </div>
         </div>
-        <button
-          onClick={() => setShowTimer(!showTimer)}
-          className="btn btn-secondary w-full sm:w-auto"
-        >
-          <Clock className="w-4 h-4 mr-2" />
-          Rest Timer
-        </button>
       </div>
 
       {/* Motivational Quote */}
