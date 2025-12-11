@@ -1,0 +1,18 @@
+{
+  "name": "Fitness Tracker",
+  "short_name": "FitTrack",
+  "description": "Track your workouts and diet for weight gain",
+  "start_url": "/fitness-tracker/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#3B82F6",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/fitness-tracker/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

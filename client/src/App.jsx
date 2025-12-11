@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { 
   Dumbbell, 
   UtensilsCrossed, 
@@ -19,6 +19,10 @@ import WeeklyView from './components/WeeklyView';
 import ProgressView from './components/ProgressView';
 import ReportView from './components/ReportView';
 import SettingsView from './components/SettingsView';
+import QuickActions from './components/QuickActions';
+import PullToRefresh from './components/PullToRefresh';
+import usePullToRefresh from './hooks/usePullToRefresh';
+import useSwipeNavigation from './hooks/useSwipeNavigation';
 
 const tabs = [
   { id: 'dashboard', label: 'Home', icon: Home },
@@ -39,7 +43,7 @@ function App() {
   const [error, setError] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       const todayData = await api.getToday();
@@ -51,11 +55,17 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  // Pull to refresh
+  const { pullDistance, isRefreshing } = usePullToRefresh(fetchData);
+
+  // Swipe navigation between tabs
+  useSwipeNavigation(mobileMainTabs, activeTab, setActiveTab);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const handleExerciseToggle = async (exerciseId, completed) => {
     if (!data) return;
@@ -99,6 +109,21 @@ function App() {
       }));
     } catch (err) {
       console.error('Error updating daily log:', err);
+    }
+  };
+
+  // Quick action handlers
+  const handleQuickWaterAdd = async () => {
+    if (!data) return;
+    const newWater = (data.dailyLog?.water_intake || 0) + 1;
+    await handleDailyLogUpdate({ water_intake: newWater });
+  };
+
+  const handleQuickExercise = async () => {
+    if (!data) return;
+    const nextExercise = data.exercises?.find(e => !e.completed);
+    if (nextExercise) {
+      await handleExerciseToggle(nextExercise.id, true);
     }
   };
 
@@ -175,6 +200,9 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Pull to Refresh Indicator */}
+      <PullToRefresh pullDistance={pullDistance} isRefreshing={isRefreshing} />
+
       {/* Header - Compact on mobile */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50 safe-top">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
@@ -249,13 +277,24 @@ function App() {
         {renderContent()}
       </main>
 
+      {/* Quick Actions FAB */}
+      {data && !loading && (activeTab === 'dashboard' || activeTab === 'workout') && (
+        <QuickActions 
+          onWaterAdd={handleQuickWaterAdd}
+          onQuickExercise={handleQuickExercise}
+        />
+      )}
+
       {/* Mobile Bottom Navigation */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 safe-bottom">
         <div className="flex items-center justify-around h-16 px-2">
           {tabs.filter(tab => mobileMainTabs.includes(tab.id)).map(tab => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => {
+                if (navigator.vibrate) navigator.vibrate(20);
+                setActiveTab(tab.id);
+              }}
               className={`flex flex-col items-center justify-center flex-1 py-2 px-1 rounded-xl transition-all touch-target ${
                 activeTab === tab.id
                   ? 'text-blue-600'
