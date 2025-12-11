@@ -205,7 +205,7 @@ function App() {
                 <Dumbbell className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-base sm:text-xl font-bold text-gray-900">Fitness Tracker</h1>
+                <h1 className="text-base sm:text-xl font-bold text-gray-900">Nitin Fitness Tracker</h1>
                 <p className="text-[10px] sm:text-xs text-gray-500 hidden sm:block">Weight Gain Program</p>
               </div>
             </div>
