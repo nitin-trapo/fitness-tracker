@@ -123,69 +123,85 @@ export default function Dashboard({ data, onExerciseToggle, onMealToggle, onDail
       )}
 
       {/* Quick Stats - Single Row */}
-      <div className="grid grid-cols-4 gap-2">
+      <div className="flex gap-3 overflow-x-auto pb-2">
         {/* Workout Progress */}
-        <div className="card !p-2 sm:!p-3 text-center">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-1">
-            <Dumbbell className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+        <div className="card !p-3 flex-1 min-w-[140px]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+              <Dumbbell className="w-5 h-5 text-blue-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-gray-500">Workout</p>
+              <p className="text-base font-bold text-blue-600">{completedExercises}/{exercises.length}</p>
+            </div>
           </div>
-          <p className="text-[10px] sm:text-xs text-gray-500">Workout</p>
-          <p className="text-xs sm:text-sm font-bold text-blue-600">{completedExercises}/{exercises.length}</p>
-          <div className="w-full bg-gray-100 rounded-full h-1 mt-1">
-            <div className="bg-blue-600 h-1 rounded-full" style={{ width: `${workoutProgress}%` }} />
+          <div className="w-full bg-gray-100 rounded-full h-1.5 mt-2">
+            <div className="bg-blue-600 h-1.5 rounded-full" style={{ width: `${workoutProgress}%` }} />
           </div>
         </div>
 
         {/* Diet Progress */}
-        <div className="card !p-2 sm:!p-3 text-center">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-1">
-            <UtensilsCrossed className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+        <div className="card !p-3 flex-1 min-w-[140px]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+              <UtensilsCrossed className="w-5 h-5 text-green-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-gray-500">Meals</p>
+              <p className="text-base font-bold text-green-600">{completedMeals}/{meals.length}</p>
+            </div>
           </div>
-          <p className="text-[10px] sm:text-xs text-gray-500">Meals</p>
-          <p className="text-xs sm:text-sm font-bold text-green-600">{completedMeals}/{meals.length}</p>
-          <div className="w-full bg-gray-100 rounded-full h-1 mt-1">
-            <div className="bg-green-600 h-1 rounded-full" style={{ width: `${dietProgress}%` }} />
+          <div className="w-full bg-gray-100 rounded-full h-1.5 mt-2">
+            <div className="bg-green-600 h-1.5 rounded-full" style={{ width: `${dietProgress}%` }} />
           </div>
         </div>
 
         {/* Water Intake */}
-        <div className="card !p-2 sm:!p-3 text-center">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-cyan-100 rounded-xl flex items-center justify-center mx-auto mb-1">
-            <Droplets className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-600" />
-          </div>
-          <p className="text-[10px] sm:text-xs text-gray-500">Water</p>
-          <p className="text-xs sm:text-sm font-bold text-cyan-600">{waterIntake}/10</p>
-          <div className="flex items-center gap-1 mt-1">
-            <button onClick={() => handleWaterChange(-1)} className="w-5 h-5 rounded bg-gray-100 hover:bg-gray-200 flex items-center justify-center">
-              <Minus className="w-3 h-3" />
-            </button>
-            <div className="flex-1 bg-gray-100 rounded-full h-1">
-              <div className="bg-cyan-600 h-1 rounded-full" style={{ width: `${Math.min((waterIntake / 10) * 100, 100)}%` }} />
+        <div className="card !p-3 flex-1 min-w-[140px]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center flex-shrink-0">
+              <Droplets className="w-5 h-5 text-cyan-600" />
             </div>
-            <button onClick={() => handleWaterChange(1)} className="w-5 h-5 rounded bg-gray-100 hover:bg-gray-200 flex items-center justify-center">
-              <Plus className="w-3 h-3" />
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-gray-500">Water</p>
+              <p className="text-base font-bold text-cyan-600">{waterIntake}/10</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 mt-2">
+            <button onClick={() => handleWaterChange(-1)} className="w-7 h-7 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center">
+              <Minus className="w-4 h-4" />
+            </button>
+            <div className="flex-1 bg-gray-100 rounded-full h-1.5">
+              <div className="bg-cyan-600 h-1.5 rounded-full" style={{ width: `${Math.min((waterIntake / 10) * 100, 100)}%` }} />
+            </div>
+            <button onClick={() => handleWaterChange(1)} className="w-7 h-7 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center">
+              <Plus className="w-4 h-4" />
             </button>
           </div>
         </div>
 
         {/* Weight */}
-        <div className="card !p-2 sm:!p-3 text-center">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-1">
-            <Scale className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
+        <div className="card !p-3 flex-1 min-w-[140px]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+              <Scale className="w-5 h-5 text-purple-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-gray-500">Weight</p>
+              <p className="text-base font-bold text-purple-600">{weight ? `${weight} kg` : '--'}</p>
+            </div>
           </div>
-          <p className="text-[10px] sm:text-xs text-gray-500">Weight</p>
-          <p className="text-xs sm:text-sm font-bold text-purple-600">{weight ? `${weight}kg` : '--'}</p>
-          <div className="flex items-center gap-1 mt-1">
+          <div className="flex items-center gap-2 mt-2">
             <input
               type="number"
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
               placeholder="kg"
-              className="flex-1 min-w-0 px-1 py-0.5 text-[10px] border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-purple-500"
+              className="flex-1 min-w-0 px-2 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
               step="0.1"
             />
-            <button onClick={handleWeightSave} className="w-5 h-5 rounded bg-purple-100 hover:bg-purple-200 flex items-center justify-center">
-              <Save className="w-3 h-3 text-purple-600" />
+            <button onClick={handleWeightSave} className="w-7 h-7 rounded-lg bg-purple-100 hover:bg-purple-200 flex items-center justify-center">
+              <Save className="w-4 h-4 text-purple-600" />
             </button>
           </div>
         </div>
