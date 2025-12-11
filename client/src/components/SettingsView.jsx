@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Settings, Dumbbell, UtensilsCrossed, Plus, Pencil, Trash2, X, Save, ChevronDown, ChevronUp, Moon, Sun, Download, Database } from 'lucide-react';
+import { Settings, Dumbbell, UtensilsCrossed, Plus, Pencil, Trash2, X, Save, ChevronDown, ChevronUp, Moon, Sun, Download, Database, Bell } from 'lucide-react';
 import api from '../api';
 import NutritionView from './NutritionView';
 import SupplementsView from './SupplementsView';
+import NotificationSettings from './NotificationSettings';
 
 const categories = ['Warmup', 'Chest', 'Back', 'Shoulder', 'Biceps', 'Triceps', 'Legs', 'Abs', 'Forearms', 'Traps'];
 const mealTypes = [
@@ -349,6 +350,11 @@ export default function SettingsView() {
         </div>
       ) : activeSection === 'general' ? (
         <div className="space-y-4">
+          {/* Notifications */}
+          <div className="card !p-4">
+            <NotificationSettings />
+          </div>
+
           {/* Dark Mode Toggle */}
           <div className="card !p-4">
             <div className="flex items-center justify-between">

@@ -21,6 +21,7 @@ import ReportView from './components/ReportView';
 import SettingsView from './components/SettingsView';
 import QuickActions from './components/QuickActions';
 import useSwipeNavigation from './hooks/useSwipeNavigation';
+import notificationService from './services/notifications';
 
 const tabs = [
   { id: 'dashboard', label: 'Home', icon: Home },
@@ -60,6 +61,29 @@ function App() {
 
   useEffect(() => {
     fetchData();
+    
+    // Initialize notifications on app load
+    const initNotifications = async () => {
+      try {
+        const settings = await api.getSettings();
+        if (notificationService.getPermission() === 'granted') {
+          if (settings.waterReminders === 'true') {
+            notificationService.startWaterReminders(parseInt(settings.waterInterval) || 60);
+          }
+          if (settings.mealReminders === 'true') {
+            const meals = await api.getMeals();
+            notificationService.scheduleMealReminders(meals);
+          }
+        }
+      } catch (err) {
+        console.log('Notifications not initialized:', err);
+      }
+    };
+    initNotifications();
+
+    return () => {
+      notificationService.stopAll();
+    };
   }, [fetchData]);
 
   const handleExerciseToggle = async (exerciseId, completed) => {
