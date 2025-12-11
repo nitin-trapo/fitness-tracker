@@ -20,8 +20,6 @@ import ProgressView from './components/ProgressView';
 import ReportView from './components/ReportView';
 import SettingsView from './components/SettingsView';
 import QuickActions from './components/QuickActions';
-import PullToRefresh from './components/PullToRefresh';
-import usePullToRefresh from './hooks/usePullToRefresh';
 import useSwipeNavigation from './hooks/useSwipeNavigation';
 
 const tabs = [
@@ -56,9 +54,6 @@ function App() {
       setLoading(false);
     }
   }, []);
-
-  // Pull to refresh
-  const { pullDistance, isRefreshing } = usePullToRefresh(fetchData);
 
   // Swipe navigation between tabs
   useSwipeNavigation(mobileMainTabs, activeTab, setActiveTab);
@@ -200,9 +195,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Pull to Refresh Indicator */}
-      <PullToRefresh pullDistance={pullDistance} isRefreshing={isRefreshing} />
-
       {/* Header - Compact on mobile */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50 safe-top">
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
