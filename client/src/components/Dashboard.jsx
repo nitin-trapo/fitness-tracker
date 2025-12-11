@@ -36,11 +36,9 @@ export default function Dashboard({ data, onExerciseToggle, onMealToggle, onDail
   const [notes, setNotes] = useState('');
   const [showNotes, setShowNotes] = useState(false);
   const [showTimer, setShowTimer] = useState(false);
-  const [quote, setQuote] = useState(null);
 
   useEffect(() => {
     api.getStreak().then(res => setStreak(res.streak)).catch(() => {});
-    api.getRandomQuote().then(res => setQuote(res)).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -102,19 +100,6 @@ export default function Dashboard({ data, onExerciseToggle, onMealToggle, onDail
           </div>
         </div>
       </div>
-
-      {/* Motivational Quote */}
-      {quote && (
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl border border-blue-100">
-          <div className="flex items-start gap-3">
-            <span className="text-xl flex-shrink-0">💪</span>
-            <div>
-              <p className="text-sm sm:text-base text-gray-700 italic">"{quote.quote_text}"</p>
-              <p className="text-xs text-gray-500 mt-1">— {quote.author}</p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Timer Modal */}
       {showTimer && (
