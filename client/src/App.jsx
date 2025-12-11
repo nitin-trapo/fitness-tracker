@@ -90,11 +90,38 @@ function App() {
     // Connect to real-time sync service
     realtimeSyncService.connect();
     
-    // Listen for data updates from other devices
+    // Listen for data updates from other devices - update state directly without full refresh
     const unsubscribe = realtimeSyncService.addListener('data-update', (update) => {
-      console.log('Received real-time update:', update.type);
-      // Refresh data when update is received
-      fetchData();
+      console.log('Received real-time update:', update.type, update.data);
+      
+      // Update state directly based on update type (no loading jerk)
+      setData(prev => {
+        if (!prev) return prev;
+        
+        switch (update.type) {
+          case 'exercise':
+            return {
+              ...prev,
+              exercises: prev.exercises.map(ex =>
+                ex.id === update.data.exerciseId ? { ...ex, completed: update.data.completed } : ex
+              )
+            };
+          case 'meal':
+            return {
+              ...prev,
+              meals: prev.meals.map(m =>
+                m.id === update.data.mealId ? { ...m, completed: update.data.completed } : m
+              )
+            };
+          case 'daily-log':
+            return {
+              ...prev,
+              dailyLog: { ...prev.dailyLog, ...update.data }
+            };
+          default:
+            return prev;
+        }
+      });
     });
 
     return () => {
