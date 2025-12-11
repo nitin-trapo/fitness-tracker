@@ -1,12 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Background -->
   <rect width="512" height="512" rx="96" fill="#3B82F6"/>
-  <g transform="translate(96, 156)">
-    <path d="M40 100h40v-80h-40v80zm240 0h40v-80h-40v80z" fill="white"/>
-    <rect x="80" y="60" width="160" height="80" rx="8" fill="white"/>
-    <rect x="60" y="80" width="200" height="40" rx="4" fill="white"/>
-    <circle cx="40" cy="60" r="30" fill="white"/>
-    <circle cx="280" cy="60" r="30" fill="white"/>
-    <circle cx="40" cy="140" r="30" fill="white"/>
-    <circle cx="280" cy="140" r="30" fill="white"/>
+  
+  <!-- Letter N -->
+  <text x="256" y="300" font-family="Arial, sans-serif" font-size="280" font-weight="bold" fill="white" text-anchor="middle" dominant-baseline="middle">N</text>
+  
+  <!-- Small Dumbbell at bottom -->
+  <g transform="translate(156, 380)">
+    <!-- Left weight -->
+    <rect x="0" y="8" width="24" height="44" rx="6" fill="white"/>
+    <!-- Bar -->
+    <rect x="24" y="22" width="152" height="16" rx="4" fill="white"/>
+    <!-- Right weight -->
+    <rect x="176" y="8" width="24" height="44" rx="6" fill="white"/>
   </g>
 </svg>
