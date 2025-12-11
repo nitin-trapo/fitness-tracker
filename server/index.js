@@ -12,6 +12,44 @@ app.use(express.json());
 // Initialize database
 seedDatabase();
 
+// SSE clients for real-time updates
+const sseClients = new Set();
+
+// Broadcast update to all connected clients
+const broadcastUpdate = (type, data = {}) => {
+  const message = JSON.stringify({ type, data, timestamp: Date.now() });
+  sseClients.forEach(client => {
+    client.write(`data: ${message}\n\n`);
+  });
+};
+
+// SSE endpoint for real-time updates
+app.get('/api/events', (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  
+  // Send initial connection message
+  res.write(`data: ${JSON.stringify({ type: 'connected', timestamp: Date.now() })}\n\n`);
+  
+  // Add client to set
+  sseClients.add(res);
+  console.log(`SSE client connected. Total clients: ${sseClients.size}`);
+  
+  // Keep connection alive with heartbeat
+  const heartbeat = setInterval(() => {
+    res.write(`data: ${JSON.stringify({ type: 'heartbeat', timestamp: Date.now() })}\n\n`);
+  }, 30000);
+  
+  // Remove client on disconnect
+  req.on('close', () => {
+    clearInterval(heartbeat);
+    sseClients.delete(res);
+    console.log(`SSE client disconnected. Total clients: ${sseClients.size}`);
+  });
+});
+
 // Helper functions
 const getDateString = (date = new Date()) => date.toISOString().split('T')[0];
 
@@ -167,6 +205,10 @@ app.put('/api/daily-log/:date', (req, res) => {
     db.prepare(`UPDATE daily_logs SET ${updates.join(', ')} WHERE id = ?`).run(...values);
     
     const updated = db.prepare('SELECT * FROM daily_logs WHERE id = ?').get(dailyLog.id);
+    
+    // Broadcast update to all clients
+    broadcastUpdate('daily-log', { date, ...updated });
+    
     res.json(updated);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -187,6 +229,9 @@ app.post('/api/exercise-toggle', (req, res) => {
       db.prepare("INSERT INTO exercise_logs (daily_log_id, exercise_id, completed, sets_completed, notes) VALUES (?, ?, ?, ?, '')").run(dailyLog.id, exerciseId, completed ? 1 : 0, setsCompleted);
     }
     
+    // Broadcast update to all clients
+    broadcastUpdate('exercise', { date, exerciseId, completed });
+    
     res.json({ success: true });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -206,6 +251,9 @@ app.post('/api/meal-toggle', (req, res) => {
     } else {
       db.prepare('INSERT INTO meal_logs (daily_log_id, meal_id, completed) VALUES (?, ?, ?)').run(dailyLog.id, mealId, completed ? 1 : 0);
     }
+    
+    // Broadcast update to all clients
+    broadcastUpdate('meal', { date, mealId, completed });
     
     res.json({ success: true });
   } catch (error) {

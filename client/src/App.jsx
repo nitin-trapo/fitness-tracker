@@ -24,6 +24,7 @@ import PullToRefresh from './components/PullToRefresh';
 import useSwipeNavigation from './hooks/useSwipeNavigation';
 import usePullToRefresh from './hooks/usePullToRefresh';
 import notificationService from './services/notifications';
+import realtimeSyncService from './services/realtimeSync';
 
 const tabs = [
   { id: 'dashboard', label: 'Home', icon: Home },
@@ -86,8 +87,20 @@ function App() {
     };
     initNotifications();
 
+    // Connect to real-time sync service
+    realtimeSyncService.connect();
+    
+    // Listen for data updates from other devices
+    const unsubscribe = realtimeSyncService.addListener('data-update', (update) => {
+      console.log('Received real-time update:', update.type);
+      // Refresh data when update is received
+      fetchData();
+    });
+
     return () => {
       notificationService.stopAll();
+      unsubscribe();
+      realtimeSyncService.disconnect();
     };
   }, [fetchData]);
 
