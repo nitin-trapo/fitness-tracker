@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { TrendingUp, Scale, Droplets, Target, Calendar, ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import api from '../api';
+import MeasurementsView from './MeasurementsView';
+import GoalsView from './GoalsView';
+import AchievementsView from './AchievementsView';
+import ActivityCalendar from './ActivityCalendar';
 
 export default function ProgressView({ data, onDailyLogUpdate }) {
   const [progressData, setProgressData] = useState([]);
@@ -235,6 +239,26 @@ export default function ProgressView({ data, onDailyLogUpdate }) {
         ) : (
           <p className="text-gray-500 text-center py-4">No logs yet</p>
         )}
+      </div>
+
+      {/* Body Measurements */}
+      <div className="card">
+        <MeasurementsView />
+      </div>
+
+      {/* Goals */}
+      <div className="card">
+        <GoalsView />
+      </div>
+
+      {/* Achievements */}
+      <div className="card">
+        <AchievementsView />
+      </div>
+
+      {/* Activity Calendar */}
+      <div className="card">
+        <ActivityCalendar />
       </div>
     </div>
   );

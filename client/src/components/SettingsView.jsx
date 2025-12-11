@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Settings, Dumbbell, UtensilsCrossed, Plus, Pencil, Trash2, X, Save, ChevronDown, ChevronUp } from 'lucide-react';
+import { Settings, Dumbbell, UtensilsCrossed, Plus, Pencil, Trash2, X, Save, ChevronDown, ChevronUp, Moon, Sun, Download, Database } from 'lucide-react';
 import api from '../api';
+import NutritionView from './NutritionView';
+import SupplementsView from './SupplementsView';
 
 const categories = ['Warmup', 'Chest', 'Back', 'Shoulder', 'Biceps', 'Triceps', 'Legs', 'Abs', 'Forearms', 'Traps'];
 const mealTypes = [
@@ -22,9 +24,18 @@ export default function SettingsView() {
   const [showMealModal, setShowMealModal] = useState(false);
   const [editingExercise, setEditingExercise] = useState(null);
   const [editingMeal, setEditingMeal] = useState(null);
+  const [darkMode, setDarkMode] = useState(false);
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     loadData();
+    // Load dark mode setting
+    api.getSettings().then(settings => {
+      if (settings.darkMode === 'true') {
+        setDarkMode(true);
+        document.documentElement.classList.add('dark');
+      }
+    }).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -130,6 +141,41 @@ export default function SettingsView() {
     }
   };
 
+  const handleToggleDarkMode = async () => {
+    const newValue = !darkMode;
+    setDarkMode(newValue);
+    if (newValue) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    try {
+      await api.updateSetting('darkMode', newValue.toString());
+    } catch (error) {
+      console.error('Error saving dark mode setting:', error);
+    }
+  };
+
+  const handleExportData = async () => {
+    setExporting(true);
+    try {
+      const data = await api.exportData();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `fitness-tracker-export-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error exporting data:', error);
+    } finally {
+      setExporting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -150,7 +196,7 @@ export default function SettingsView() {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <button
           onClick={() => setActiveSection('workout')}
           className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-base font-medium transition-all touch-target ${
@@ -158,7 +204,7 @@ export default function SettingsView() {
           }`}
         >
           <Dumbbell className="w-4 h-4" />
-          <span className="hidden sm:inline">Workout Plan</span>
+          <span className="hidden sm:inline">Workout</span>
           <span className="sm:hidden">Workout</span>
         </button>
         <button
@@ -168,8 +214,26 @@ export default function SettingsView() {
           }`}
         >
           <UtensilsCrossed className="w-4 h-4" />
-          <span className="hidden sm:inline">Diet Plan</span>
+          <span className="hidden sm:inline">Diet</span>
           <span className="sm:hidden">Diet</span>
+        </button>
+        <button
+          onClick={() => setActiveSection('nutrition')}
+          className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-base font-medium transition-all touch-target ${
+            activeSection === 'nutrition' ? 'bg-orange-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+        >
+          <Database className="w-4 h-4" />
+          <span>Nutrition</span>
+        </button>
+        <button
+          onClick={() => setActiveSection('general')}
+          className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-base font-medium transition-all touch-target ${
+            activeSection === 'general' ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+        >
+          <Settings className="w-4 h-4" />
+          <span>General</span>
         </button>
       </div>
 
@@ -237,7 +301,7 @@ export default function SettingsView() {
             </div>
           )}
         </div>
-      ) : (
+      ) : activeSection === 'diet' ? (
         <div className="card">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -274,7 +338,64 @@ export default function SettingsView() {
             ))}
           </div>
         </div>
-      )}
+      ) : activeSection === 'nutrition' ? (
+        <div className="space-y-4">
+          <div className="card">
+            <NutritionView />
+          </div>
+          <div className="card">
+            <SupplementsView />
+          </div>
+        </div>
+      ) : activeSection === 'general' ? (
+        <div className="space-y-4">
+          {/* Dark Mode Toggle */}
+          <div className="card !p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {darkMode ? <Moon className="w-5 h-5 text-purple-600" /> : <Sun className="w-5 h-5 text-yellow-500" />}
+                <div>
+                  <p className="font-medium text-gray-900">Dark Mode</p>
+                  <p className="text-xs text-gray-500">Switch between light and dark theme</p>
+                </div>
+              </div>
+              <button
+                onClick={handleToggleDarkMode}
+                className={`relative w-12 h-6 rounded-full transition-colors ${darkMode ? 'bg-purple-600' : 'bg-gray-300'}`}
+              >
+                <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${darkMode ? 'left-7' : 'left-1'}`} />
+              </button>
+            </div>
+          </div>
+
+          {/* Data Export */}
+          <div className="card !p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Download className="w-5 h-5 text-blue-600" />
+                <div>
+                  <p className="font-medium text-gray-900">Export Data</p>
+                  <p className="text-xs text-gray-500">Download all your fitness data as JSON</p>
+                </div>
+              </div>
+              <button
+                onClick={handleExportData}
+                disabled={exporting}
+                className="btn btn-secondary text-sm"
+              >
+                {exporting ? 'Exporting...' : 'Export'}
+              </button>
+            </div>
+          </div>
+
+          {/* App Info */}
+          <div className="card !p-4">
+            <h3 className="font-medium text-gray-900 mb-2">About</h3>
+            <p className="text-sm text-gray-500">Nitin Fitness Tracker v1.0</p>
+            <p className="text-xs text-gray-400 mt-1">Track your workouts, diet, and progress across all devices.</p>
+          </div>
+        </div>
+      ) : null}
 
       {showExerciseModal && (
         <ExerciseModal

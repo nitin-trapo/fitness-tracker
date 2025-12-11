@@ -92,10 +92,49 @@ const mealsData = [
   { name: 'Before Bed', time: '11:00 PM', meal_type: 'night', items: JSON.stringify([{ name: 'Mass Gainer', quantity: '1 scoop' }, { name: 'Milk', quantity: '300ml' }]), order_index: 7 }
 ];
 
+const achievementsData = [
+  { badge_id: 'first_workout', badge_name: 'First Workout', badge_description: 'Complete your first workout', badge_icon: '🏋️' },
+  { badge_id: 'streak_7', badge_name: '7 Day Streak', badge_description: 'Maintain a 7-day workout streak', badge_icon: '🔥' },
+  { badge_id: 'streak_30', badge_name: '30 Day Streak', badge_description: 'Maintain a 30-day workout streak', badge_icon: '💪' },
+  { badge_id: 'streak_100', badge_name: '100 Day Streak', badge_description: 'Maintain a 100-day workout streak', badge_icon: '🏆' },
+  { badge_id: 'early_bird', badge_name: 'Early Bird', badge_description: 'Complete a workout before 6 AM', badge_icon: '🌅' },
+  { badge_id: 'hydration_master', badge_name: 'Hydration Master', badge_description: 'Drink 10 glasses of water in a day', badge_icon: '💧' },
+  { badge_id: 'meal_prep_pro', badge_name: 'Meal Prep Pro', badge_description: 'Complete all meals for 7 days straight', badge_icon: '🍽️' },
+  { badge_id: 'weight_goal', badge_name: 'Weight Goal Achieved', badge_description: 'Reach your target weight', badge_icon: '⚖️' },
+  { badge_id: 'pr_breaker', badge_name: 'PR Breaker', badge_description: 'Set a new personal record', badge_icon: '📈' },
+  { badge_id: 'consistency_king', badge_name: 'Consistency King', badge_description: 'Complete 50 workouts', badge_icon: '👑' },
+  { badge_id: 'century_club', badge_name: 'Century Club', badge_description: 'Complete 100 workouts', badge_icon: '💯' },
+  { badge_id: 'iron_will', badge_name: 'Iron Will', badge_description: 'Never skip leg day for a month', badge_icon: '🦵' }
+];
+
+const quotesData = [
+  { quote_text: "The only bad workout is the one that didn't happen.", author: "Unknown" },
+  { quote_text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+  { quote_text: "The body achieves what the mind believes.", author: "Napoleon Hill" },
+  { quote_text: "Push yourself because no one else is going to do it for you.", author: "Unknown" },
+  { quote_text: "The pain you feel today will be the strength you feel tomorrow.", author: "Arnold Schwarzenegger" },
+  { quote_text: "Don't limit your challenges. Challenge your limits.", author: "Unknown" },
+  { quote_text: "The difference between try and triumph is a little umph.", author: "Marvin Phillips" },
+  { quote_text: "Your body can stand almost anything. It's your mind that you have to convince.", author: "Unknown" },
+  { quote_text: "Fitness is not about being better than someone else. It's about being better than you used to be.", author: "Khloe Kardashian" },
+  { quote_text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+  { quote_text: "Strength does not come from physical capacity. It comes from an indomitable will.", author: "Mahatma Gandhi" },
+  { quote_text: "Take care of your body. It's the only place you have to live.", author: "Jim Rohn" },
+  { quote_text: "The harder you work, the luckier you get.", author: "Gary Player" },
+  { quote_text: "Champions keep playing until they get it right.", author: "Billie Jean King" },
+  { quote_text: "No pain, no gain. Shut up and train.", author: "Unknown" },
+  { quote_text: "Sweat is just fat crying.", author: "Unknown" },
+  { quote_text: "The clock is ticking. Are you becoming the person you want to be?", author: "Greg Plitt" },
+  { quote_text: "If it doesn't challenge you, it won't change you.", author: "Fred DeVito" },
+  { quote_text: "Motivation is what gets you started. Habit is what keeps you going.", author: "Jim Ryun" },
+  { quote_text: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar" }
+];
+
 export function seedDatabase() {
   const workoutCount = db.prepare('SELECT COUNT(*) as count FROM workouts').get();
   if (workoutCount.count > 0) {
     console.log('Database already seeded');
+    seedAchievementsAndQuotes();
     return;
   }
 
@@ -125,7 +164,26 @@ export function seedDatabase() {
     }
   })();
 
+  seedAchievementsAndQuotes();
   console.log('Database seeded successfully!');
+}
+
+function seedAchievementsAndQuotes() {
+  const achievementCount = db.prepare('SELECT COUNT(*) as count FROM achievements').get();
+  if (achievementCount.count === 0) {
+    const insertAchievement = db.prepare('INSERT INTO achievements (badge_id, badge_name, badge_description, badge_icon) VALUES (?, ?, ?, ?)');
+    for (const a of achievementsData) {
+      insertAchievement.run(a.badge_id, a.badge_name, a.badge_description, a.badge_icon);
+    }
+  }
+
+  const quoteCount = db.prepare('SELECT COUNT(*) as count FROM quotes').get();
+  if (quoteCount.count === 0) {
+    const insertQuote = db.prepare('INSERT INTO quotes (quote_text, author) VALUES (?, ?)');
+    for (const q of quotesData) {
+      insertQuote.run(q.quote_text, q.author);
+    }
+  }
 }
 
 export function resetDatabase() {
