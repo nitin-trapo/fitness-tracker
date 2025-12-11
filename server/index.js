@@ -18,7 +18,7 @@ const getDateString = (date = new Date()) => date.toISOString().split('T')[0];
 const getOrCreateDailyLog = (date) => {
   let log = db.prepare('SELECT * FROM daily_logs WHERE log_date = ?').get(date);
   if (!log) {
-    const result = db.prepare('INSERT INTO daily_logs (log_date, weight, water_intake, notes) VALUES (?, NULL, 0, "")').run(date);
+    const result = db.prepare("INSERT INTO daily_logs (log_date, weight, water_intake, notes) VALUES (?, NULL, 0, '')").run(date);
     log = db.prepare('SELECT * FROM daily_logs WHERE id = ?').get(result.lastInsertRowid);
   }
   return log;
@@ -184,7 +184,7 @@ app.post('/api/exercise-toggle', (req, res) => {
     if (existing) {
       db.prepare('UPDATE exercise_logs SET completed = ?, sets_completed = ? WHERE id = ?').run(completed ? 1 : 0, setsCompleted, existing.id);
     } else {
-      db.prepare('INSERT INTO exercise_logs (daily_log_id, exercise_id, completed, sets_completed, notes) VALUES (?, ?, ?, ?, "")').run(dailyLog.id, exerciseId, completed ? 1 : 0, setsCompleted);
+      db.prepare("INSERT INTO exercise_logs (daily_log_id, exercise_id, completed, sets_completed, notes) VALUES (?, ?, ?, ?, '')").run(dailyLog.id, exerciseId, completed ? 1 : 0, setsCompleted);
     }
     
     res.json({ success: true });
