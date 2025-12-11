@@ -7,7 +7,9 @@ import {
   Menu,
   X,
   FileText,
-  Settings
+  Settings,
+  Home,
+  BarChart3
 } from 'lucide-react';
 import api from './api';
 import Dashboard from './components/Dashboard';
@@ -19,14 +21,16 @@ import ReportView from './components/ReportView';
 import SettingsView from './components/SettingsView';
 
 const tabs = [
-  { id: 'dashboard', label: 'Dashboard', icon: TrendingUp },
+  { id: 'dashboard', label: 'Home', icon: Home },
   { id: 'workout', label: 'Workout', icon: Dumbbell },
   { id: 'diet', label: 'Diet', icon: UtensilsCrossed },
   { id: 'weekly', label: 'Weekly', icon: Calendar },
-  { id: 'progress', label: 'Progress', icon: TrendingUp },
+  { id: 'progress', label: 'Progress', icon: BarChart3 },
   { id: 'report', label: 'Report', icon: FileText },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
+
+const mobileMainTabs = ['dashboard', 'workout', 'diet', 'progress', 'settings'];
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -170,24 +174,24 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
-                <Dumbbell className="w-6 h-6 text-white" />
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Header - Compact on mobile */}
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 safe-top">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16">
+            {/* Logo - Smaller on mobile */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-600 rounded-xl flex items-center justify-center">
+                <Dumbbell className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Fitness Tracker</h1>
-                <p className="text-xs text-gray-500">Weight Gain Program</p>
+                <h1 className="text-base sm:text-xl font-bold text-gray-900">Fitness Tracker</h1>
+                <p className="text-[10px] sm:text-xs text-gray-500 hidden sm:block">Weight Gain Program</p>
               </div>
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden lg:flex items-center gap-1">
               {tabs.map(tab => (
                 <button
                   key={tab.id}
@@ -204,28 +208,28 @@ function App() {
               ))}
             </nav>
 
-            {/* Mobile menu button */}
+            {/* Mobile menu button for extra tabs */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 touch-target flex items-center justify-center"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Dropdown for extra tabs (Weekly, Report) */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 bg-white">
-            <nav className="px-4 py-2 space-y-1">
-              {tabs.map(tab => (
+          <div className="lg:hidden border-t border-gray-200 bg-white shadow-lg">
+            <nav className="px-3 py-2 space-y-1">
+              {tabs.filter(tab => !mobileMainTabs.includes(tab.id)).map(tab => (
                 <button
                   key={tab.id}
                   onClick={() => {
                     setActiveTab(tab.id);
                     setMobileMenuOpen(false);
                   }}
-                  className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                  className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium transition-all touch-target ${
                     activeTab === tab.id
                       ? 'bg-blue-50 text-blue-600'
                       : 'text-gray-600 hover:bg-gray-100'
@@ -240,10 +244,32 @@ function App() {
         )}
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Main Content - Add padding for bottom nav on mobile */}
+      <main className="flex-1 max-w-7xl mx-auto w-full px-3 sm:px-6 lg:px-8 py-4 sm:py-6 pb-20 lg:pb-6">
         {renderContent()}
       </main>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 safe-bottom">
+        <div className="flex items-center justify-around h-16 px-2">
+          {tabs.filter(tab => mobileMainTabs.includes(tab.id)).map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex flex-col items-center justify-center flex-1 py-2 px-1 rounded-xl transition-all touch-target ${
+                activeTab === tab.id
+                  ? 'text-blue-600'
+                  : 'text-gray-400'
+              }`}
+            >
+              <tab.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${activeTab === tab.id ? 'scale-110' : ''} transition-transform`} />
+              <span className={`text-[10px] sm:text-xs mt-1 font-medium ${activeTab === tab.id ? 'text-blue-600' : 'text-gray-500'}`}>
+                {tab.label}
+              </span>
+            </button>
+          ))}
+        </div>
+      </nav>
     </div>
   );
 }

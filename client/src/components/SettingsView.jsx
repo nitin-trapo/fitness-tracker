@@ -140,54 +140,56 @@ export default function SettingsView() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center">
-          <Settings className="w-7 h-7 text-gray-600" />
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 sm:w-14 sm:h-14 bg-gray-100 rounded-xl sm:rounded-2xl flex items-center justify-center">
+          <Settings className="w-5 h-5 sm:w-7 sm:h-7 text-gray-600" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Settings</h2>
-          <p className="text-gray-500">Customize your workout and diet plan</p>
+          <h2 className="text-lg sm:text-2xl font-bold text-gray-900">Settings</h2>
+          <p className="text-xs sm:text-base text-gray-500">Customize your plan</p>
         </div>
       </div>
 
       <div className="flex gap-2">
         <button
           onClick={() => setActiveSection('workout')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all ${
+          className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-base font-medium transition-all touch-target ${
             activeSection === 'workout' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
           <Dumbbell className="w-4 h-4" />
-          Workout Plan
+          <span className="hidden sm:inline">Workout Plan</span>
+          <span className="sm:hidden">Workout</span>
         </button>
         <button
           onClick={() => setActiveSection('diet')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all ${
+          className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-sm sm:text-base font-medium transition-all touch-target ${
             activeSection === 'diet' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
           <UtensilsCrossed className="w-4 h-4" />
-          Diet Plan
+          <span className="hidden sm:inline">Diet Plan</span>
+          <span className="sm:hidden">Diet</span>
         </button>
       </div>
 
       {activeSection === 'workout' ? (
         <div className="space-y-4">
-          <div className="card">
-            <h3 className="font-semibold text-gray-900 mb-4">Select Workout Day</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+          <div className="card !p-3 sm:!p-5">
+            <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">Select Workout Day</h3>
+            <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-2">
               {workouts.filter(w => !w.is_rest_day).map(workout => (
                 <button
                   key={workout.id}
                   onClick={() => setSelectedWorkout(workout)}
-                  className={`p-3 rounded-xl text-center transition-all ${
+                  className={`p-2 sm:p-3 rounded-xl text-center transition-all touch-target ${
                     selectedWorkout?.id === workout.id
                       ? 'bg-blue-600 text-white'
-                      : 'bg-gray-50 hover:bg-gray-100 text-gray-700'
+                      : 'bg-gray-50 hover:bg-gray-100 active:bg-gray-200 text-gray-700'
                   }`}
                 >
-                  <p className="font-medium text-sm">{workout.day_name}</p>
-                  <p className="text-xs opacity-75">{workout.workout_type.split(' ')[0]}</p>
+                  <p className="text-xs sm:text-sm font-medium">{workout.day_name.slice(0, 3)}</p>
+                  <p className="text-[10px] sm:text-xs opacity-75">{workout.workout_type.split(' ')[0]}</p>
                 </button>
               ))}
             </div>

@@ -56,48 +56,48 @@ export default function ProgressView({ data, onDailyLogUpdate }) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-4">
-        <div className="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center">
-          <TrendingUp className="w-7 h-7 text-purple-600" />
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 sm:w-14 sm:h-14 bg-purple-100 rounded-xl sm:rounded-2xl flex items-center justify-center">
+          <TrendingUp className="w-5 h-5 sm:w-7 sm:h-7 text-purple-600" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Progress Tracking</h2>
-          <p className="text-gray-500">Monitor your fitness journey</p>
+          <h2 className="text-lg sm:text-2xl font-bold text-gray-900">Progress Tracking</h2>
+          <p className="text-xs sm:text-base text-gray-500">Monitor your fitness journey</p>
         </div>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4">
         {/* Current Weight */}
-        <div className="card">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-              <Scale className="w-5 h-5 text-blue-600" />
+        <div className="card !p-3 sm:!p-5">
+          <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+              <Scale className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
             </div>
-            <span className="text-sm text-gray-500">Current Weight</span>
+            <span className="text-xs sm:text-sm text-gray-500">Current</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">
+          <p className="text-xl sm:text-2xl font-bold text-gray-900">
             {latestWeight ? `${latestWeight} kg` : 'N/A'}
           </p>
         </div>
 
         {/* Weight Change */}
-        <div className="card">
-          <div className="flex items-center gap-3 mb-2">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+        <div className="card !p-3 sm:!p-5">
+          <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+            <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center ${
               weightChange > 0 ? 'bg-green-100' : weightChange < 0 ? 'bg-red-100' : 'bg-gray-100'
             }`}>
               {weightChange > 0 ? (
-                <ArrowUp className="w-5 h-5 text-green-600" />
+                <ArrowUp className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
               ) : weightChange < 0 ? (
-                <ArrowDown className="w-5 h-5 text-red-600" />
+                <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 text-red-600" />
               ) : (
-                <Minus className="w-5 h-5 text-gray-600" />
+                <Minus className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
               )}
             </div>
-            <span className="text-sm text-gray-500">30-Day Change</span>
+            <span className="text-xs sm:text-sm text-gray-500">30-Day</span>
           </div>
-          <p className={`text-2xl font-bold ${
+          <p className={`text-xl sm:text-2xl font-bold ${
             weightChange > 0 ? 'text-green-600' : weightChange < 0 ? 'text-red-600' : 'text-gray-900'
           }`}>
             {weightChange > 0 ? '+' : ''}{weightChange} kg
@@ -105,42 +105,42 @@ export default function ProgressView({ data, onDailyLogUpdate }) {
         </div>
 
         {/* Streak */}
-        <div className="card">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-orange-600" />
+        <div className="card !p-3 sm:!p-5">
+          <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-orange-100 rounded-xl flex items-center justify-center">
+              <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600" />
             </div>
-            <span className="text-sm text-gray-500">Current Streak</span>
+            <span className="text-xs sm:text-sm text-gray-500">Streak</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{streak} days</p>
+          <p className="text-xl sm:text-2xl font-bold text-gray-900">{streak} days</p>
         </div>
 
         {/* Avg Water */}
-        <div className="card">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 bg-cyan-100 rounded-xl flex items-center justify-center">
-              <Droplets className="w-5 h-5 text-cyan-600" />
+        <div className="card !p-3 sm:!p-5">
+          <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-cyan-100 rounded-xl flex items-center justify-center">
+              <Droplets className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-600" />
             </div>
-            <span className="text-sm text-gray-500">Avg Water/Day</span>
+            <span className="text-xs sm:text-sm text-gray-500">Avg Water</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{avgWater} glasses</p>
+          <p className="text-xl sm:text-2xl font-bold text-gray-900">{avgWater} glasses</p>
         </div>
       </div>
 
       {/* Log Today's Weight */}
-      <div className="card">
-        <h3 className="font-semibold text-gray-900 mb-4">Log Today's Weight</h3>
-        <div className="flex gap-3">
+      <div className="card !p-3 sm:!p-5">
+        <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">Log Today's Weight</h3>
+        <div className="flex gap-2 sm:gap-3">
           <input
             type="number"
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
-            placeholder="Enter weight in kg"
-            className="flex-1 px-4 py-2 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Weight in kg"
+            className="flex-1 min-w-0 px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
             step="0.1"
           />
-          <button onClick={handleWeightSave} className="btn btn-primary">
-            Save Weight
+          <button onClick={handleWeightSave} className="btn btn-primary text-sm sm:text-base">
+            Save
           </button>
         </div>
       </div>

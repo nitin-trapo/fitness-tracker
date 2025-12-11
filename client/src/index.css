@@ -8,6 +8,39 @@
 
 body {
   @apply bg-gray-50 text-gray-900 min-h-screen;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  overscroll-behavior: none;
+}
+
+/* Safe area for notched devices */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+/* Mobile-optimized touch targets */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Prevent text selection on interactive elements */
+button, a, .clickable {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection in inputs */
+input, textarea {
+  -webkit-user-select: auto;
+  user-select: auto;
 }
 
 /* Custom scrollbar */
@@ -77,6 +110,12 @@ body {
 /* Button styles */
 .btn {
   @apply inline-flex items-center justify-center px-4 py-2 rounded-xl font-medium transition-all duration-200;
+  min-height: 44px;
+}
+
+.btn-sm {
+  @apply px-3 py-1.5 text-sm;
+  min-height: 36px;
 }
 
 .btn-primary {

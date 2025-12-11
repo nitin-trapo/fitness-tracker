@@ -38,45 +38,45 @@ export default function WeeklyView() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-4">
-        <div className="w-14 h-14 bg-purple-100 rounded-2xl flex items-center justify-center">
-          <Calendar className="w-7 h-7 text-purple-600" />
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 sm:w-14 sm:h-14 bg-purple-100 rounded-xl sm:rounded-2xl flex items-center justify-center">
+          <Calendar className="w-5 h-5 sm:w-7 sm:h-7 text-purple-600" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Weekly Schedule</h2>
-          <p className="text-gray-500">Push/Pull/Legs Split - 6 Days</p>
+          <h2 className="text-lg sm:text-2xl font-bold text-gray-900">Weekly Schedule</h2>
+          <p className="text-xs sm:text-base text-gray-500">Push/Pull/Legs - 6 Days</p>
         </div>
       </div>
 
       {/* Week Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+      <div className="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-4">
         {workouts.map((workout) => (
           <div
             key={workout.day_of_week}
             onClick={() => setSelectedDay(selectedDay === workout.day_of_week ? null : workout.day_of_week)}
-            className={`card card-hover cursor-pointer ${
-              workout.day_of_week === today ? 'ring-2 ring-blue-500 ring-offset-2' : ''
+            className={`card card-hover cursor-pointer !p-2 sm:!p-5 touch-target ${
+              workout.day_of_week === today ? 'ring-2 ring-blue-500 ring-offset-1 sm:ring-offset-2' : ''
             } ${selectedDay === workout.day_of_week ? 'border-2 border-blue-500' : ''}`}
           >
             <div className="text-center">
-              <p className={`text-sm font-medium ${workout.day_of_week === today ? 'text-blue-600' : 'text-gray-500'}`}>
-                {workout.day_name}
+              <p className={`text-[10px] sm:text-sm font-medium ${workout.day_of_week === today ? 'text-blue-600' : 'text-gray-500'}`}>
+                {workout.day_name.slice(0, 3)}
               </p>
               
               {workout.is_rest_day ? (
-                <div className="mt-3">
-                  <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-2">
-                    <CheckCircle2 className="w-6 h-6 text-gray-400" />
+                <div className="mt-1 sm:mt-3">
+                  <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gray-100 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-1 sm:mb-2">
+                    <CheckCircle2 className="w-4 h-4 sm:w-6 sm:h-6 text-gray-400" />
                   </div>
-                  <p className="font-semibold text-gray-600">Rest</p>
+                  <p className="text-xs sm:text-sm font-semibold text-gray-600">Rest</p>
                 </div>
               ) : (
-                <div className="mt-3">
-                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-2 ${getWorkoutColor(workout.workout_type).split(' ')[0]}`}>
-                    <Dumbbell className={`w-6 h-6 ${getWorkoutColor(workout.workout_type).split(' ')[2]}`} />
+                <div className="mt-1 sm:mt-3">
+                  <div className={`w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-1 sm:mb-2 ${getWorkoutColor(workout.workout_type).split(' ')[0]}`}>
+                    <Dumbbell className={`w-4 h-4 sm:w-6 sm:h-6 ${getWorkoutColor(workout.workout_type).split(' ')[2]}`} />
                   </div>
-                  <p className="font-semibold text-gray-900 text-sm">{workout.workout_type.split(' ')[0]}</p>
-                  <div className="flex flex-wrap justify-center gap-1 mt-2">
+                  <p className="text-xs sm:text-sm font-semibold text-gray-900">{workout.workout_type.split(' ')[0]}</p>
+                  <div className="hidden sm:flex flex-wrap justify-center gap-1 mt-2">
                     {workout.muscle_groups?.slice(0, 2).map((muscle, i) => (
                       <span key={i} className="text-xs px-2 py-0.5 bg-gray-100 rounded-full text-gray-600">
                         {muscle}
@@ -87,7 +87,7 @@ export default function WeeklyView() {
               )}
 
               {workout.day_of_week === today && (
-                <span className="inline-block mt-2 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
+                <span className="inline-block mt-1 sm:mt-2 text-[8px] sm:text-xs font-medium text-blue-600 bg-blue-50 px-1.5 sm:px-2 py-0.5 rounded-full">
                   Today
                 </span>
               )}
@@ -102,9 +102,9 @@ export default function WeeklyView() {
       )}
 
       {/* Legend */}
-      <div className="card">
-        <h3 className="font-semibold text-gray-900 mb-4">Workout Split Legend</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="card !p-3 sm:!p-5">
+        <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">Workout Split</h3>
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
               <Dumbbell className="w-4 h-4 text-red-600" />
