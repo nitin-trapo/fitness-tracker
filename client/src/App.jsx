@@ -43,7 +43,7 @@ function App() {
       setError(null);
     } catch (err) {
       console.error('Error fetching data:', err);
-      setError('Failed to connect to server. Make sure the backend is running.');
+      setError('Failed to load data. Please refresh the page.');
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,6 @@
 # Fitness Tracker
 
-A full-stack fitness tracking application for managing your workout and diet plans.
+A client-side fitness tracking application for managing your workout and diet plans. All data is stored locally in your browser using IndexedDB.
 
 ## Features
 
@@ -11,84 +11,43 @@ A full-stack fitness tracking application for managing your workout and diet pla
 - **Exercise Timer** - Rest timer with presets for between sets
 - **Daily Notes** - Add notes for each day
 - **Progress Dashboard** - View streaks, stats, and charts
+- **Offline Support** - All data stored locally, works without internet
 
 ## Tech Stack
 
 - **Frontend**: React 18 + Vite + Tailwind CSS
-- **Backend**: Node.js + Express
-- **Database**: MySQL
+- **Database**: IndexedDB (via Dexie.js) - client-side storage
 
 ## Prerequisites
 
-- Node.js 18+ 
-- MySQL 8.0+
+- Node.js 18+
 
 ## Setup Instructions
 
-### 1. Database Setup
-
-Make sure MySQL is running, then update the `.env` file in the `server` folder:
-
-```env
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_mysql_password
-DB_NAME=fitness_tracker
-DB_PORT=3306
-PORT=5000
-```
-
-### 2. Install Dependencies
+### 1. Install Dependencies
 
 ```bash
-# Install server dependencies
-cd server
-npm install
-
-# Install client dependencies
-cd ../client
+cd client
 npm install
 ```
 
-### 3. Initialize Database
+### 2. Start the Application
 
-```bash
-cd server
-npm run db:init
-npm run db:seed
-```
-
-### 4. Start the Application
-
-**Terminal 1 - Start Backend:**
-```bash
-cd server
-npm run dev
-```
-
-**Terminal 2 - Start Frontend:**
 ```bash
 cd client
 npm run dev
 ```
 
-### 5. Open the App
+### 3. Open the App
 
 Visit `http://localhost:3000` in your browser.
+
+The database will be automatically initialized with workout and diet data on first load.
 
 ## Project Structure
 
 ```
 fitness-tracker/
-├── server/                 # Backend API
-│   ├── db/
-│   │   ├── config.js      # Database connection
-│   │   ├── init.js        # Create tables
-│   │   └── seed.js        # Seed workout & diet data
-│   ├── index.js           # Express server & routes
-│   ├── package.json
-│   └── .env
-│
 ├── client/                 # Frontend React App
 │   ├── src/
 │   │   ├── components/
@@ -97,8 +56,13 @@ fitness-tracker/
 │   │   │   ├── DietTracker.jsx
 │   │   │   ├── WeeklyView.jsx
 │   │   │   ├── ProgressView.jsx
+│   │   │   ├── ReportView.jsx
+│   │   │   ├── SettingsView.jsx
 │   │   │   └── Timer.jsx
-│   │   ├── api.js         # API client
+│   │   ├── db/
+│   │   │   ├── database.js  # Dexie database schema
+│   │   │   └── seed.js      # Initial workout & diet data
+│   │   ├── api.js           # Local database operations
 │   │   ├── App.jsx
 │   │   ├── main.jsx
 │   │   └── index.css
@@ -107,20 +71,6 @@ fitness-tracker/
 │
 └── README.md
 ```
-
-## API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/today` | Get today's workout, meals, and log |
-| GET | `/api/day/:date` | Get data for specific date |
-| GET | `/api/workouts` | Get all workout templates |
-| GET | `/api/meals` | Get all meal templates |
-| PUT | `/api/daily-log/:date` | Update weight, water, notes |
-| POST | `/api/exercise-log` | Toggle exercise completion |
-| POST | `/api/meal-log` | Toggle meal completion |
-| GET | `/api/progress` | Get weight history |
-| GET | `/api/streak` | Get current streak count |
 
 ## Workout Schedule
 

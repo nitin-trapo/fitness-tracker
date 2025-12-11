@@ -5,12 +5,6 @@ export default defineConfig({
   plugins: [react()],
   base: '/fitness-tracker/',
   server: {
-    port: 3000,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true
-      }
-    }
+    port: 3000
   }
 })
