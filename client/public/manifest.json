@@ -1,6 +1,6 @@
 {
-  "name": "Fitness Tracker",
-  "short_name": "FitTrack",
+  "name": "Nitin Fitness Tracker",
+  "short_name": "Nitin Fit",
   "description": "Track your workouts and diet for weight gain",
   "start_url": "/fitness-tracker/",
   "display": "standalone",
